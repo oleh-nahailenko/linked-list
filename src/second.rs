@@ -31,6 +31,18 @@ impl<T> LinkedList<T> {
             node.value
         })
     }
+
+    pub fn peek(&self) -> Option<&T> {
+        self.head.as_ref().map(|node| {
+            &node.value
+        })
+    }
+
+    pub fn peek_mut(&mut self) -> Option<&mut T> {
+        self.head.as_mut().map(|node| {
+            &mut node.value
+        })
+    }
 }
 
 impl<T> Drop for LinkedList<T> {
@@ -66,4 +78,39 @@ mod test {
         assert_eq!(list.pop(), Some(1));
     }
 
+    #[test]
+    fn peek_empty_linked_list_returns_none() {
+        let list: second::LinkedList<i32> = LinkedList::new();
+
+        assert_eq!(list.peek(), None);
+    }
+
+    #[test]
+    fn peek_linked_list_has_head_returns_some() {
+        let mut list: second::LinkedList<i32> = LinkedList::new();
+        list.push(1);
+
+        assert_eq!(list.peek(), Some(&1));
+    }
+
+    #[test]
+    fn peek_mut_empty_linked_list_returns_none() {
+        let mut list: second::LinkedList<i32> = LinkedList::new();
+
+        assert_eq!(list.peek_mut(), None);
+    }
+
+    #[test]
+    fn peek_mut_linked_list_has_head_returns_some() {
+        let mut list: second::LinkedList<i32> = LinkedList::new();
+        list.push(1);
+
+        assert_eq!(list.peek_mut(), Some(&mut 1));
+        list.peek_mut().map(|value| {
+            *value = 11
+        });
+
+        assert_eq!(list.peek(), Some(&11));
+        assert_eq!(list.pop(), Some(11));
+    }
 }
